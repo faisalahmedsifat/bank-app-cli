@@ -11,7 +11,7 @@ class BankAccountRepositoryImpl(BankAccountRepository):
         
     def find_by_id(self, bank_account_id: int):
         for account in self.bank_accounts:
-            if account.id == bank_account_id:
+            if account.account_number == bank_account_id:
                 return account
         return None
     
@@ -28,7 +28,7 @@ class BankAccountRepositoryImpl(BankAccountRepository):
     def show_all_accounts(self) -> list[BankAccountEntity]:
         return self.bank_accounts
     
-    def delete(self, bank_account_id) -> bool:
+    def delete(self, bank_account_id: int) -> bool:
         account = self.find_by_id(bank_account_id)
         if account:
             self.bank_accounts.remove(account)

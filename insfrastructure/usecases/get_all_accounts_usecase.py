@@ -7,4 +7,4 @@ class GetAllAccountsUseCase:
         self.bank_account_repo = bank_account_repo
 
     def execute(self) -> list[BankAccountEntity]:
-        return self.account_repository.show_all_accounts()
+        return self.bank_account_repo.show_all_accounts()

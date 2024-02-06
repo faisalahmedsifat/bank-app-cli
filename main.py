@@ -2,6 +2,7 @@
 from insfrastructure.entities.person_entity import PersonEntity
 from insfrastructure.enums.account_types import AccountTypes
 from insfrastructure.usecases.create_account_usecase import CreateAccountUseCase
+from insfrastructure.usecases.delete_account_usecase import DeleteAccountUseCase
 from insfrastructure.usecases.get_all_accounts_usecase import GetAllAccountsUseCase
 from repositories.bank_account_repository_impl import BankAccountRepositoryImpl
 from ui.bank_app_ui import BankAppUI
@@ -68,7 +69,7 @@ class BankAppCLI:
         accounts = GetAllAccountsUseCase(self.bank_account_repository).execute()
 
         # Show All Accounts
-        self.ui.show_all_accounts(accounts)
+        self.ui.display_all_accounts(accounts)
     
     def update_an_account(self):
         # self.ui.update_an_account()
@@ -76,9 +77,14 @@ class BankAppCLI:
         pass
 
     def delete_an_account(self):
-        # self.ui.delete_an_account()
         # TODO
-        pass
+        account_number = self.ui.get_valid_account_id("Enter account number to delete: ")
+        deleted = DeleteAccountUseCase(self.bank_account_repository).execute(account_number)
+        if deleted:
+            print("Account deleted successfully...\nupdated list of accounts:")
+            # self.display_all_accounts()
+        
+
 
     def deposit_to_an_account(self):
         # self.ui.deposit_to_an_account()

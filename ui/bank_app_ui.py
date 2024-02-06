@@ -35,8 +35,9 @@ class BankAppUI:
         return input(message)
     
     @staticmethod
-    def show_user_details( person: PersonEntity):
-        print("Showing account details...\n")
+    def show_user_details( person: PersonEntity, details_text: bool = True):
+        if details_text:
+            print("Showing account details...\n")
         headers = ["Attribute", "Value"]
         data = [
             ["Name", f"{person.first_name} {person.last_name}"],
@@ -144,5 +145,19 @@ class BankAppUI:
                     
     @staticmethod
     def display_all_accounts(accounts):
+        print("Displaying all accounts...\n")
+        if not accounts:
+            print("No accounts found.")
         for account in accounts:
-            BankAppUI.show_account_details(account)
+            BankAppUI.show_account_details(account, details_text=False)
+            
+    @staticmethod
+    def get_valid_account_id(prompt):
+        while True:
+            account_id = BankAppUI.get_user_input(prompt)
+            try:
+                account_id = int(account_id)
+                return account_id
+            except ValueError:
+                print("Invalid account number. Please enter a valid account number.")
+                continue
