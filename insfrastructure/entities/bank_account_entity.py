@@ -11,11 +11,11 @@ class BankAccountEntity:
             account_holder: PersonEntity, 
             balance: float, 
             account_type: AccountTypes,
-            creation_date:datetime = datetime.now(),
+            creation_date:datetime = None,
             ):
         self.id = id
         self.account_number = account_number
         self.account_holder = account_holder
         self.balance = balance
         self.account_type = account_type
-        self.creation_date = creation_date
+        self.creation_date = creation_date if creation_date is not None else datetime.now()

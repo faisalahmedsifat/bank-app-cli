@@ -1,17 +1,19 @@
+from datetime import datetime
 from uuid import uuid4
+
+from insfrastructure.enums.gender_choice import Gender
 
 class PersonEntity:
     def __init__(
             self,
-            # id: uuid4(), 
             first_name: str, 
             last_name: str, 
-            date_of_birth: str, 
+            date_of_birth: datetime, 
             email: str, 
+            gender: Gender,
             national_id: str, 
-            phone_number: str = 'N/A', 
-            parmanent_address: str = 'N/A', 
-            gender: str = 'N/A',
+            phone_number: str, 
+            parmanent_address: str, 
         ):
         self.id = uuid4()
         self.first_name = first_name

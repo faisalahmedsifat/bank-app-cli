@@ -1,5 +1,7 @@
+
 from insfrastructure.entities.person_entity import PersonEntity
 from insfrastructure.usecases.create_account_usecase import CreateAccountUseCase
+from insfrastructure.usecases.get_all_accounts_usecase import GetAllAccountsUseCase
 from repositories.bank_account_repository_impl import BankAccountRepositoryImpl
 from ui.bank_app_ui import BankAppUI
 
@@ -11,16 +13,17 @@ class BankAppCLI:
 
     def create_new_account(self):
         
-        # self.ui.create_new_account()
+        # Get account holder details            
         first_name = self.ui.get_user_input("Enter first name: ")
         last_name = self.ui.get_user_input("Enter last name: ")
-        gender = self.ui.get_user_input("Enter Gender: ")
-        date_of_birth = self.ui.get_user_input("Enter date of birth: ")
-        email = self.ui.get_user_input("Enter email: ")
+        date_of_birth = self.ui.get_valid_date("Enter date of birth: ")
+        email = self.ui.get_valid_email("Enter email: ")
         national_id = self.ui.get_user_input("Enter national id: ")
         phone_number = self.ui.get_user_input("Enter phone number: ")
         parmanent_address = self.ui.get_user_input("Enter permanent address: ")
-        
+        gender = self.ui.get_valid_gender("Enter gender: ") 
+       
+        #  Create account holder 
         account_holder = PersonEntity(
                 first_name=first_name, 
                 last_name=last_name, 
@@ -32,20 +35,18 @@ class BankAppCLI:
                 parmanent_address=parmanent_address,
                 )
 
-        self.ui.show_user_details(account_holder)
-        # self.ui.show_message("Account holder created successfully")
-        initial_deposit = self.ui.get_user_input("Enter initial deposit: ")
-        account = CreateAccountUseCase(self.bank_account_repository).execute(account_holder, initial_deposit)
-        # self.ui.show_message(f"Account created successfully. Account number: {account.account_number}")
+        # Get account details
+        initial_deposit = self.ui.get_valid_amount("Enter initial deposit: ")
+        account_type = self.ui.get_valid_account_type("Enter account type: ")
+        account = CreateAccountUseCase(self.bank_account_repository).execute(account_holder, initial_deposit, account_type)
+        
+        # Show Account Details
         self.ui.show_account_details(account)
-        
-        
         
 
     def display_all_accounts(self):
-        # self.ui.display_all_accounts()
-        # TODO
-        pass 
+        accounts = GetAllAccountsUseCase(self.bank_account_repository).execute()
+        self.ui.show_all_accounts(accounts)
     
     def update_an_account(self):
         # self.ui.update_an_account()
