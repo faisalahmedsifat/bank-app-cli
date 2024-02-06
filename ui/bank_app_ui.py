@@ -1,6 +1,10 @@
+from insfrastructure.entities.bank_account_entity import BankAccountEntity
+from insfrastructure.entities.person_entity import PersonEntity
+
+
 class BankAppUI:
-    @staticmethod
-    def display_menu():
+
+    def display_menu(self):
         single_dashes = "-" * 50
         double_dashes = "=" * 50
         print("\n")
@@ -20,34 +24,24 @@ class BankAppUI:
         print("8. Exit")
         print("\n")
 
-    @staticmethod
-    def get_user_choice():
-        return input("Enter your choice: ")
+    def get_user_input(self, message: str = "Enter your choice: "):
+        return input(message)
     
-    @staticmethod
-    def create_new_user():
-        print("Creating a new user...")
-        
-    @staticmethod
-    def display_all_accounts():
-        print("Displaying all accounts...")
-        
-    @staticmethod
-    def update_an_account():
-        print("Updating an account...")
-        
-    @staticmethod
-    def delete_an_account():
-        print("Deleting an account...")
-        
-    @staticmethod
-    def deposit_to_an_account():
-        print("Depositing to an account...")
-        
-    @staticmethod
-    def withdraw_from_an_account():
-        print("Withdrawing from an account...")
-        
-    @staticmethod
-    def search_for_an_account():
-        print("Searching for an account...")
+    def show_user_details(self, person: PersonEntity):
+        print("Showing user details...")
+        print()
+        print(f"Name: {person.first_name} {person.last_name}")
+        print(f"email: {person.email}")
+        print(f"Phone: {person.phone_number}")
+        print(f"National ID: {person.national_id}")
+        print()
+    
+    def show_account_details(self, account: BankAccountEntity):
+        print("Showing account details...")
+        print()
+        print(f"Account number: {account.account_number}")
+        print(f"Account holder: {account.account_holder.first_name} {account.account_holder.last_name}")
+        print(f"Balance: {account.balance}")
+        print(f"Account type: {account.account_type}")
+        print(f"Creation date: {account.creation_date}")
+        print()
