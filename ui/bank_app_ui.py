@@ -1,5 +1,7 @@
 from datetime import datetime
 import re
+
+from tabulate import tabulate
 from insfrastructure.entities.bank_account_entity import BankAccountEntity
 from insfrastructure.entities.person_entity import PersonEntity
 from insfrastructure.enums.account_types import AccountTypes
@@ -34,26 +36,41 @@ class BankAppUI:
     
     @staticmethod
     def show_user_details( person: PersonEntity):
-        print("Showing user details...")
-        print()
-        print(f"Name: {person.first_name} {person.last_name}")
-        print(f"email: {person.email}")
-        print(f"Phone: {person.phone_number}")
-        print(f"National ID: {person.national_id}")
-        print(f"Date of birth: {person.date_of_birth}")
-        print(f"Gender: {person.gender}")
-        print()
+        print("Showing account details...\n")
+        headers = ["Attribute", "Value"]
+        data = [
+            ["Name", f"{person.first_name} {person.last_name}"],
+            ["Account holder's email", person.email],
+            ["Account holder's phone number", person.phone_number],
+            ["Account holder's national ID", person.national_id],
+            ["Account holder's date of birth", person.date_of_birth],
+            ["Account holder's gender", person.gender],
+            ["Account holder's permanent address", person.parmanent_address]
+            
+        ]
+        table = tabulate(data, headers=headers, tablefmt="pretty")
+        print(table)
     
     @staticmethod
     def show_account_details(account: BankAccountEntity):
-        print("Showing account details...")
-        print()
-        print(f"Account number: {account.account_number}")
-        print(f"Account holder: {account.account_holder.first_name} {account.account_holder.last_name}")
-        print(f"Balance: {account.balance}")
-        print(f"Account type: {account.account_type}")
-        print(f"Creation date: {account.creation_date}")
-        print()
+        print("Showing account details...\n")
+        headers = ["Attribute", "Value"]
+        data = [
+            ["Account number", account.account_number],
+            ["Account holder's name", f"{account.account_holder.first_name} {account.account_holder.last_name}"],
+            ["Balance", account.balance],
+            ["Account type", account.account_type],
+            ["Creation date", account.creation_date],
+            ["Account holder's email", account.account_holder.email],
+            ["Account holder's phone number", account.account_holder.phone_number],
+            ["Account holder's national ID", account.account_holder.national_id],
+            ["Account holder's date of birth", account.account_holder.date_of_birth],
+            ["Account holder's gender", account.account_holder.gender],
+            ["Account holder's permanent address", account.account_holder.parmanent_address]
+            
+        ]
+        table = tabulate(data, headers=headers, tablefmt="pretty")
+        print(table)
     
     @staticmethod
     def get_valid_gender(prompt):

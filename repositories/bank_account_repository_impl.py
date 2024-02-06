@@ -1,3 +1,4 @@
+from uuid import uuid4
 from insfrastructure.entities.bank_account_entity import BankAccountEntity
 from insfrastructure.entities.person_entity import PersonEntity
 from insfrastructure.enums.account_types import AccountTypes
@@ -16,8 +17,7 @@ class BankAccountRepositoryImpl(BankAccountRepository):
     
     def create(self, account_holder: PersonEntity, initial_deposit: float, account_type: AccountTypes = AccountTypes.SAVINGS):
         account = BankAccountEntity(
-            id=len(self.bank_accounts) + 1,
-            account_number=str(len(self.bank_accounts) + 1),
+            account_number=len(self.bank_accounts) + 1,
             account_holder=account_holder,
             balance=initial_deposit,
             account_type=account_type

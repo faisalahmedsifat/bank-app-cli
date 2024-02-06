@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import UUID, uuid4
 from insfrastructure.entities.person_entity import PersonEntity
 from insfrastructure.enums.account_types import AccountTypes
 
@@ -6,14 +7,13 @@ from insfrastructure.enums.account_types import AccountTypes
 class BankAccountEntity:
     def __init__(
             self, 
-            id: int, 
-            account_number: str, 
+            account_number: int, 
             account_holder: PersonEntity, 
             balance: float, 
             account_type: AccountTypes,
             creation_date:datetime = None,
             ):
-        self.id = id
+        self.id = uuid4()
         self.account_number = account_number
         self.account_holder = account_holder
         self.balance = balance
