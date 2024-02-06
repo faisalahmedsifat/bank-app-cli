@@ -73,6 +73,18 @@ class BankAppUI:
         print(table)
     
     @staticmethod
+    def show_account_types(minimum_initial_deposit, minimum_balance_before_withdrawal):
+        print("Account types we offer...")
+        headers = ["Account Type", "Minimum Initial Deposit", "Minimum Balance Before Withdrawal"]
+        data = []
+        for account_type in AccountTypes:
+            data.append([account_type.name, minimum_initial_deposit[account_type], minimum_balance_before_withdrawal[account_type]])
+        table = tabulate(data, headers=headers, tablefmt="pretty")
+        print(table)
+
+
+    
+    @staticmethod
     def get_valid_gender(prompt):
         while True:
             gender_input = BankAppUI.get_user_input(prompt)
@@ -103,18 +115,22 @@ class BankAppUI:
                 print("Invalid email address format. Please enter a valid email address.")
                 
     @staticmethod
-    def get_valid_amount(prompt):
+    def get_valid_amount(prompt, minimum_amount, account_type):
         while True:
             amount = BankAppUI.get_user_input(prompt)
             try:
                 amount = float(amount)
+                if(amount < minimum_amount[account_type]):
+                    print(f"Amount must be greater than {minimum_amount[account_type]} for {account_type.name} account. Please enter a valid amount.")
+                    continue
                 return amount
             except ValueError:
                 print("Invalid amount. Please enter a valid amount.")
                 continue
             
     @staticmethod
-    def get_valid_account_type(prompt):
+    def get_valid_account_type(prompt, minimum_initial_deposit, minimum_balance_before_withdrawal):
+        BankAppUI.show_account_types(minimum_initial_deposit=minimum_initial_deposit, minimum_balance_before_withdrawal=minimum_balance_before_withdrawal)
         while True:
             account_type_input = BankAppUI.get_user_input(prompt)
             try:
@@ -123,7 +139,7 @@ class BankAppUI:
             except KeyError:
                 print("Invalid account type. Please enter either one of the following: ")
                 for account_type in AccountTypes:
-                    print(account_type.name)
+                    print(account_type.name.lower())
                     
                     
     @staticmethod

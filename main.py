@@ -1,5 +1,6 @@
 
 from insfrastructure.entities.person_entity import PersonEntity
+from insfrastructure.enums.account_types import AccountTypes
 from insfrastructure.usecases.create_account_usecase import CreateAccountUseCase
 from insfrastructure.usecases.get_all_accounts_usecase import GetAllAccountsUseCase
 from repositories.bank_account_repository_impl import BankAccountRepositoryImpl
@@ -10,6 +11,23 @@ class BankAppCLI:
     def __init__(self, ui, bank_account_repository):
         self.ui = ui
         self.bank_account_repository = bank_account_repository
+        self.minimum_initial_deposit = {
+            AccountTypes.SAVINGS: 2000.0,
+            AccountTypes.CURRENT: 2000.0,
+            AccountTypes.FIXED: 5000.0,
+            AccountTypes.STUDENT: 500.0,
+            AccountTypes.SALARY: 1000.0,
+            AccountTypes.OTHERS: 6000.0,
+        }
+        
+        self.minimum_balance_before_withdrawal = {
+            AccountTypes.SAVINGS: 500.0,
+            AccountTypes.CURRENT: 500.0,
+            AccountTypes.FIXED: 2000.0,
+            AccountTypes.STUDENT: 0.0,
+            AccountTypes.SALARY: 500.0,
+            AccountTypes.OTHERS: 2000.0,
+        }
 
     def create_new_account(self):
         
@@ -36,8 +54,9 @@ class BankAppCLI:
                 )
 
         # Get account details
-        initial_deposit = self.ui.get_valid_amount("Enter initial deposit: ")
-        account_type = self.ui.get_valid_account_type("Enter account type: ")
+        account_type = self.ui.get_valid_account_type("Enter account type: ", self.minimum_initial_deposit, self.minimum_balance_before_withdrawal)
+
+        initial_deposit = self.ui.get_valid_amount("Enter initial deposit: ", self.minimum_initial_deposit, account_type)
         account = CreateAccountUseCase(self.bank_account_repository).execute(account_holder, initial_deposit, account_type)
         
         # Show Account Details
@@ -45,7 +64,10 @@ class BankAppCLI:
         
 
     def display_all_accounts(self):
+        # Get All Accounts
         accounts = GetAllAccountsUseCase(self.bank_account_repository).execute()
+
+        # Show All Accounts
         self.ui.show_all_accounts(accounts)
     
     def update_an_account(self):

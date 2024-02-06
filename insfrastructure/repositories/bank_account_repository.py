@@ -23,7 +23,7 @@ class BankAccountRepository(ABC):
         pass
     
     @abstractmethod
-    def delete(self):
+    def delete(self, bank_account_id: int) -> bool:
         pass
     
     @abstractmethod
