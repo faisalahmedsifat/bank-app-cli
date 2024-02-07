@@ -49,8 +49,14 @@ class BankAccountRepositoryImpl(BankAccountRepository):
             return True
         return False
     
-    def withdraw(self):
-        pass
+    def withdraw(self, bank_account_id: int, amount: float) -> bool:
+        account = self.find_by_id(bank_account_id)
+        if account:
+            if account.balance >= amount:
+                account.balance -= amount
+                return True
+        return False
+
     
     def search(self):
         pass

@@ -131,6 +131,24 @@ class BankAppUI:
                 continue
             
     @staticmethod
+    def get_valid_withdraw_amount(prompt, minimum_withdraw_ammounts, account: BankAccountEntity):
+        while True:
+            amount = BankAppUI.get_user_input(prompt)
+            if not account:
+                print("Account not found. Please enter a valid account number.")
+                continue
+            try:
+                amount = float(amount)
+                amount_after_withdrawal = account.balance - amount
+                if(amount_after_withdrawal < minimum_withdraw_ammounts[account.account_type]):
+                    print(f"Account must have {minimum_withdraw_ammounts[account.account_type]} for a {account.account_type.name} account after withdrawal. Please enter a valid amount.")
+                    continue
+                return amount
+            except ValueError:
+                print("Invalid amount. Please enter a valid amount.")
+                continue
+            
+    @staticmethod
     def get_valid_account_type(prompt, minimum_initial_deposit, minimum_balance_before_withdrawal):
         BankAppUI.show_account_types(minimum_initial_deposit=minimum_initial_deposit, minimum_balance_before_withdrawal=minimum_balance_before_withdrawal)
         while True:

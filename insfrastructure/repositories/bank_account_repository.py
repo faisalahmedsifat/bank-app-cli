@@ -31,7 +31,7 @@ class BankAccountRepository(ABC):
         pass
     
     @abstractmethod
-    def withdraw(self):
+    def withdraw(self, bank_account_id: int, amount: float) -> bool:
         pass
     
     @abstractmethod

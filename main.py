@@ -6,6 +6,7 @@ from insfrastructure.usecases.delete_account_usecase import DeleteAccountUseCase
 from insfrastructure.usecases.deposit_usecase import DepositToAccountUseCase
 from insfrastructure.usecases.get_account_by_id_usecase import GetAccountByIdUseCase
 from insfrastructure.usecases.get_all_accounts_usecase import GetAllAccountsUseCase
+from insfrastructure.usecases.withdraw_from_account_usecase import WithdrawFromAccountUseCase
 from repositories.bank_account_repository_impl import BankAccountRepositoryImpl
 from ui.bank_app_ui import BankAppUI
 
@@ -100,9 +101,15 @@ class BankAppCLI:
         
 
     def withdraw_from_an_account(self):
-        # TODO
-        pass
-
+        account_number = self.ui.get_valid_account_id("Enter account number to withdraw: ")
+        amount_to_withdraw = self.ui.get_valid_withdraw_amount("Enter amount to withdraw: ", self.minimum_balance_before_withdrawal, GetAccountByIdUseCase(self.bank_account_repository).execute(account_number))
+        withdrawal_complete = WithdrawFromAccountUseCase(self.bank_account_repository).execute(account_number, amount_to_withdraw)
+        if withdrawal_complete:
+            print("Withdrawal complete succeeded of amount ", amount_to_withdraw, " from account number ", account_number, "...\nupdated account details:")
+            self.ui.show_account_details(GetAccountByIdUseCase(self.bank_account_repository).execute(account_number))
+        else:
+            print("Account not found...")
+            
     def search_for_an_account(self):
         # TODO
         pass
@@ -128,10 +135,12 @@ class BankAppCLI:
             elif choice == "7":
                 self.search_for_an_account()
             elif choice == "8":
-                print("Exiting the program")
+                print("Exiting the program...")
                 break
             else:
-                print("Invalid choice")
+                print()
+                print("Invalid choice!!!")
+                print()
             print("\n")
         
     def run(self):
