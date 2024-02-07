@@ -3,6 +3,8 @@ from insfrastructure.entities.person_entity import PersonEntity
 from insfrastructure.enums.account_types import AccountTypes
 from insfrastructure.usecases.create_account_usecase import CreateAccountUseCase
 from insfrastructure.usecases.delete_account_usecase import DeleteAccountUseCase
+from insfrastructure.usecases.deposit_usecase import DepositToAccountUseCase
+from insfrastructure.usecases.get_account_by_id_usecase import GetAccountByIdUseCase
 from insfrastructure.usecases.get_all_accounts_usecase import GetAllAccountsUseCase
 from repositories.bank_account_repository_impl import BankAccountRepositoryImpl
 from ui.bank_app_ui import BankAppUI
@@ -77,19 +79,25 @@ class BankAppCLI:
         pass
 
     def delete_an_account(self):
-        # TODO
         account_number = self.ui.get_valid_account_id("Enter account number to delete: ")
         deleted = DeleteAccountUseCase(self.bank_account_repository).execute(account_number)
         if deleted:
             print("Account deleted successfully...\nupdated list of accounts:")
-            # self.display_all_accounts()
-        
+        else:
+            print("Account not found...") 
 
 
     def deposit_to_an_account(self):
-        # self.ui.deposit_to_an_account()
-        # TODO
-        pass
+        account_number = self.ui.get_valid_account_id("Enter account number to deposit to: ")
+        amount_to_be_deposit = self.ui.get_valid_amount("Enter amount to deposit: ")
+        deposit_complete = DepositToAccountUseCase(self.bank_account_repository).execute(account_number, amount_to_be_deposit)
+        if deposit_complete:
+            print("Deposit complete succeeded of amount ", amount_to_be_deposit, " to account number ", account_number, "...\nupdated account details:")
+            self.ui.show_account_details(GetAccountByIdUseCase(self.bank_account_repository).execute(account_number))
+        else:
+            print("Account not found...")
+            
+        
 
     def withdraw_from_an_account(self):
         # TODO
@@ -125,7 +133,7 @@ class BankAppCLI:
             else:
                 print("Invalid choice")
             print("\n")
-
+        
     def run(self):
         self.loop()
 

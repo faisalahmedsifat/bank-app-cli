@@ -42,8 +42,12 @@ class BankAccountRepositoryImpl(BankAccountRepository):
             # return True
         return False
     
-    def deposit(self):
-        pass
+    def deposit(self, bank_account_id: int, amount: float) -> bool:
+        account = self.find_by_id(bank_account_id)
+        if account:
+            account.balance += amount
+            return True
+        return False
     
     def withdraw(self):
         pass

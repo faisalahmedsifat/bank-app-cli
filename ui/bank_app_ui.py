@@ -35,9 +35,8 @@ class BankAppUI:
         return input(message)
     
     @staticmethod
-    def show_user_details( person: PersonEntity, details_text: bool = True):
-        if details_text:
-            print("Showing account details...\n")
+    def show_user_details( person: PersonEntity):
+        print("Showing account details...\n")
         headers = ["Attribute", "Value"]
         data = [
             ["Name", f"{person.first_name} {person.last_name}"],
@@ -53,8 +52,9 @@ class BankAppUI:
         print(table)
     
     @staticmethod
-    def show_account_details(account: BankAccountEntity):
-        print("Showing account details...\n")
+    def show_account_details(account: BankAccountEntity, details_text: bool = True):
+        if details_text:
+            print("Showing account details...\n")
         headers = ["Attribute", "Value"]
         data = [
             ["Account number", account.account_number],
@@ -116,14 +116,15 @@ class BankAppUI:
                 print("Invalid email address format. Please enter a valid email address.")
                 
     @staticmethod
-    def get_valid_amount(prompt, minimum_amount, account_type):
+    def get_valid_amount(prompt, minimum_amount = None, account_type: AccountTypes = None):
         while True:
             amount = BankAppUI.get_user_input(prompt)
             try:
                 amount = float(amount)
-                if(amount < minimum_amount[account_type]):
-                    print(f"Amount must be greater than {minimum_amount[account_type]} for {account_type.name} account. Please enter a valid amount.")
-                    continue
+                if(minimum_amount and account_type):
+                    if(amount < minimum_amount[account_type]):
+                        print(f"Amount must be greater than {minimum_amount[account_type]} for {account_type.name} account. Please enter a valid amount.")
+                        continue
                 return amount
             except ValueError:
                 print("Invalid amount. Please enter a valid amount.")

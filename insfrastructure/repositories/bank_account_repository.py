@@ -27,7 +27,7 @@ class BankAccountRepository(ABC):
         pass
     
     @abstractmethod
-    def deposit(self):
+    def deposit(self, bank_account_id: int, amount: float) -> bool:
         pass
     
     @abstractmethod
