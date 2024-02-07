@@ -32,8 +32,11 @@ class BankAppUI:
 
     @staticmethod
     def get_user_input( message: str = "Enter your choice: "):
-        return input(message)
-    
+        input_message = input(message)
+        if not input_message.strip():
+            return None
+        return input_message
+        
     @staticmethod
     def show_user_details( person: PersonEntity):
         print("Showing account details...\n")
@@ -99,17 +102,22 @@ class BankAppUI:
     def get_valid_date(prompt):
         while True:
             date_str = BankAppUI.get_user_input(prompt)
-            try:
-                date = datetime.strptime(date_str, "%Y-%m-%d")
-                return date
-            except ValueError:
-                print("Invalid date format. Please enter date in the format YYYY-MM-DD.")
-                continue
+            if date_str == None:
+                return None
+            else :
+                try:
+                    date = datetime.strptime(date_str, "%Y-%m-%d")
+                    return date
+                except ValueError:
+                    print("Invalid date format. Please enter date in the format YYYY-MM-DD.")
+                    continue
             
     @staticmethod
     def get_valid_email(prompt):
         while True:
             email = BankAppUI.get_user_input(prompt)
+            if email == None:
+                return None
             if re.match(r"[^@]+@[^@]+\.[^@]+", email):
                 return email
             else:
@@ -136,7 +144,6 @@ class BankAppUI:
             amount = BankAppUI.get_user_input(prompt)
             if not account:
                 print("Account not found. Please enter a valid account number.")
-                continue
             try:
                 amount = float(amount)
                 amount_after_withdrawal = account.balance - amount

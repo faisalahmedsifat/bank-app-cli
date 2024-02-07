@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import uuid4
 from insfrastructure.entities.bank_account_entity import BankAccountEntity
 from insfrastructure.entities.person_entity import PersonEntity
@@ -35,11 +36,17 @@ class BankAccountRepositoryImpl(BankAccountRepository):
             return True
         return False
     
-    def update(self):
-    #     account = self.find_by_id(bank_account_id)
-    #     if account:
-    #         account.account_holder = new_account_holder
-            # return True
+    def update(self, bank_account_id: int, first_name: str, last_name: str, date_of_birth: datetime, email: str, national_id: str, phone_number: str, parmanent_address: str):
+        account = self.find_by_id(bank_account_id)
+        if account:
+            account.account_holder.first_name = first_name
+            account.account_holder.last_name = last_name
+            account.account_holder.date_of_birth = date_of_birth
+            account.account_holder.email = email
+            account.account_holder.national_id = national_id
+            account.account_holder.phone_number = phone_number
+            account.account_holder.parmanent_address = parmanent_address
+            return True
         return False
     
     def deposit(self, bank_account_id: int, amount: float) -> bool:
@@ -56,10 +63,3 @@ class BankAccountRepositoryImpl(BankAccountRepository):
                 account.balance -= amount
                 return True
         return False
-
-    
-    def search(self):
-        pass
-    
-    
-    
