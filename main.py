@@ -80,8 +80,12 @@ class BankAppCLI:
         pass
 
     def delete_an_account(self):
+        # Get account number to delete
         account_number = self.ui.get_valid_account_id("Enter account number to delete: ")
+
+        # Delete account
         deleted = DeleteAccountUseCase(self.bank_account_repository).execute(account_number)
+
         if deleted:
             print("Account deleted successfully...")
         else:
@@ -89,9 +93,13 @@ class BankAppCLI:
 
 
     def deposit_to_an_account(self):
+        # Get account number and amount to deposit
         account_number = self.ui.get_valid_account_id("Enter account number to deposit to: ")
         amount_to_be_deposit = self.ui.get_valid_amount("Enter amount to deposit: ")
+
+        # Deposit to account
         deposit_complete = DepositToAccountUseCase(self.bank_account_repository).execute(account_number, amount_to_be_deposit)
+
         if deposit_complete:
             print("Deposit complete succeeded of amount ", amount_to_be_deposit, " to account number ", account_number, "...\nupdated account details:")
             self.ui.show_account_details(GetAccountByIdUseCase(self.bank_account_repository).execute(account_number))
@@ -101,8 +109,11 @@ class BankAppCLI:
         
 
     def withdraw_from_an_account(self):
+        # Get account number and amount to withdraw
         account_number = self.ui.get_valid_account_id("Enter account number to withdraw: ")
         amount_to_withdraw = self.ui.get_valid_withdraw_amount("Enter amount to withdraw: ", self.minimum_balance_before_withdrawal, GetAccountByIdUseCase(self.bank_account_repository).execute(account_number))
+
+        # Withdraw from account
         withdrawal_complete = WithdrawFromAccountUseCase(self.bank_account_repository).execute(account_number, amount_to_withdraw)
         if withdrawal_complete:
             print("Withdrawal complete succeeded of amount ", amount_to_withdraw, " from account number ", account_number, "...\nupdated account details:")
@@ -111,8 +122,17 @@ class BankAppCLI:
             print("Account not found...")
             
     def search_for_an_account(self):
-        # TODO
-        pass
+        # Get account number to search
+        account_number = self.ui.get_valid_account_id("Enter account number to search: ")
+        
+        # Search for account
+        account = GetAccountByIdUseCase(self.bank_account_repository).execute(account_number)
+        
+        if account:
+            print("Account found...\n")
+            self.ui.show_account_details(account)
+        else:
+            print("Account not found...")
 
     def loop(self):
         while True:
