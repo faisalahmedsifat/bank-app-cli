@@ -1,6 +1,6 @@
 
 from insfrastructure.entities.person_entity import PersonEntity
-from insfrastructure.enums.account_types import AccountTypes
+from insfrastructure.enums.account_types import AccountType
 from insfrastructure.usecases.create_account_usecase import CreateAccountUseCase
 from insfrastructure.usecases.delete_account_usecase import DeleteAccountUseCase
 from insfrastructure.usecases.deposit_usecase import DepositToAccountUseCase
@@ -15,21 +15,21 @@ class BankAppCLI:
         self.ui = ui
         self.bank_account_repository = bank_account_repository
         self.minimum_initial_deposit = {
-            AccountTypes.SAVINGS: 2000.0,
-            AccountTypes.CURRENT: 2000.0,
-            AccountTypes.FIXED: 5000.0,
-            AccountTypes.STUDENT: 500.0,
-            AccountTypes.SALARY: 1000.0,
-            AccountTypes.OTHERS: 6000.0,
+            AccountType.SAVINGS: 2000.0,
+            AccountType.CURRENT: 2000.0,
+            AccountType.FIXED: 5000.0,
+            AccountType.STUDENT: 500.0,
+            AccountType.SALARY: 1000.0,
+            AccountType.OTHERS: 6000.0,
         }
         
         self.minimum_balance_before_withdrawal = {
-            AccountTypes.SAVINGS: 500.0,
-            AccountTypes.CURRENT: 500.0,
-            AccountTypes.FIXED: 2000.0,
-            AccountTypes.STUDENT: 0.0,
-            AccountTypes.SALARY: 500.0,
-            AccountTypes.OTHERS: 2000.0,
+            AccountType.SAVINGS: 500.0,
+            AccountType.CURRENT: 500.0,
+            AccountType.FIXED: 2000.0,
+            AccountType.STUDENT: 0.0,
+            AccountType.SALARY: 500.0,
+            AccountType.OTHERS: 2000.0,
         }
 
     def create_new_account(self):

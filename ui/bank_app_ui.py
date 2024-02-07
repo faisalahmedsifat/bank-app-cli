@@ -4,7 +4,7 @@ import re
 from tabulate import tabulate
 from insfrastructure.entities.bank_account_entity import BankAccountEntity
 from insfrastructure.entities.person_entity import PersonEntity
-from insfrastructure.enums.account_types import AccountTypes
+from insfrastructure.enums.account_types import AccountType
 from insfrastructure.enums.gender_choice import Gender
 
 
@@ -78,7 +78,7 @@ class BankAppUI:
         print("Account types we offer...")
         headers = ["Account Type", "Minimum Initial Deposit", "Minimum Balance Before Withdrawal"]
         data = []
-        for account_type in AccountTypes:
+        for account_type in AccountType:
             data.append([account_type.name, minimum_initial_deposit[account_type], minimum_balance_before_withdrawal[account_type]])
         table = tabulate(data, headers=headers, tablefmt="pretty")
         print(table)
@@ -116,7 +116,7 @@ class BankAppUI:
                 print("Invalid email address format. Please enter a valid email address.")
                 
     @staticmethod
-    def get_valid_amount(prompt, minimum_amount = None, account_type: AccountTypes = None):
+    def get_valid_amount(prompt, minimum_amount = None, account_type: AccountType = None):
         while True:
             amount = BankAppUI.get_user_input(prompt)
             try:
@@ -136,11 +136,11 @@ class BankAppUI:
         while True:
             account_type_input = BankAppUI.get_user_input(prompt)
             try:
-                account_type = AccountTypes[account_type_input.upper()]
+                account_type = AccountType[account_type_input.upper()]
                 return account_type
             except KeyError:
                 print("Invalid account type. Please enter either one of the following: ")
-                for account_type in AccountTypes:
+                for account_type in AccountType:
                     print(account_type.name.lower())
                     
                     

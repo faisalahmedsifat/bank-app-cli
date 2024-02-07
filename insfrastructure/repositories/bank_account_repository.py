@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from insfrastructure.entities.bank_account_entity import BankAccountEntity
 from insfrastructure.entities.person_entity import PersonEntity
-from insfrastructure.enums.account_types import AccountTypes
+from insfrastructure.enums.account_types import AccountType
 
 
 class BankAccountRepository(ABC):
@@ -11,7 +11,7 @@ class BankAccountRepository(ABC):
         pass
     
     @abstractmethod
-    def create(self, account_holder: PersonEntity, initial_deposit: float, account_type: AccountTypes) -> BankAccountEntity:
+    def create(self, account_holder: PersonEntity, initial_deposit: float, account_type: AccountType) -> BankAccountEntity:
         pass
     
     @abstractmethod
