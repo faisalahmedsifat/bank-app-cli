@@ -82,7 +82,7 @@ class BankAppCLI:
         account_number = self.ui.get_valid_account_id("Enter account number to delete: ")
         deleted = DeleteAccountUseCase(self.bank_account_repository).execute(account_number)
         if deleted:
-            print("Account deleted successfully...\nupdated list of accounts:")
+            print("Account deleted successfully...")
         else:
             print("Account not found...") 
 
