@@ -172,7 +172,7 @@ class BankAppUI:
                 validated_amount = InputValidator.validate_withdraw_amount(amount, minimum_withdraw_amount[account.account_type], account.balance if account else 0)
                 if validated_amount is not None:
                     return validated_amount
-                print(f"Invalid amount. Account must have {minimum_withdraw_amount} for a {account.account_type.name} account after withdrawal. Please enter a valid amount.")
+                print(f"Invalid amount. Account must have {minimum_withdraw_amount[account.account_type]} for a {account.account_type.name} account after withdrawal. Please enter a valid amount.")
 
 
     @staticmethod
