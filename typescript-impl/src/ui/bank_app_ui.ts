@@ -122,21 +122,24 @@ export class BankAppUI {
 
     async get_valid_gender(prompt: string, returnNoneOnEmpty: boolean = false): Promise<Gender | null> {
         while (true) {
-            const genderInput: string | null =await this.get_user_input(prompt, returnNoneOnEmpty);
+            const genderInput: string | null = await this.get_user_input(prompt, returnNoneOnEmpty);
             if (genderInput === null) {
                 return null;
             }
-            const gender: Gender | null = InputValidator.validateGender(genderInput);
-            if (gender !== null) {
-                return gender;
+            else {
+                const gender: Gender | null = InputValidator.validateGender(genderInput);
+                if (gender !== null) {
+                    return gender;
+                }
+                console.log("Invalid gender choice. Please enter \"male\", \"female\", or \"other\".");
+
             }
-            console.log("Invalid gender choice. Please enter \"male\", \"female\", or \"other\".");
         }
     }
 
     async get_valid_date(prompt: string, returnNoneOnEmpty: boolean = false): Promise<Date | null> {
         while (true) {
-            const dateStr: string | null =await this.get_user_input(prompt, returnNoneOnEmpty);
+            const dateStr: string | null = await this.get_user_input(prompt, returnNoneOnEmpty);
             if (dateStr === null) {
                 return null;
             }
@@ -150,7 +153,7 @@ export class BankAppUI {
 
     async get_valid_email(prompt: string, returnNoneOnEmpty: boolean = false): Promise<string | null> {
         while (true) {
-            const email: string | null =await this.get_user_input(prompt, returnNoneOnEmpty);
+            const email: string | null = await this.get_user_input(prompt, returnNoneOnEmpty);
             if (email === null) {
                 return null;
             }
@@ -164,7 +167,7 @@ export class BankAppUI {
 
     async get_valid_amount(prompt: string, minimumAmount?: Map<AccountType, number>, accountType?: AccountType, returnNoneOnEmpty: boolean = false): Promise<number | null> {
         while (true) {
-            const amount: string | null =await this.get_user_input(prompt, returnNoneOnEmpty);
+            const amount: string | null = await this.get_user_input(prompt, returnNoneOnEmpty);
             if (amount === null) {
                 return null;
             }
@@ -184,7 +187,7 @@ export class BankAppUI {
 
     async get_valid_withdraw_amount(prompt: string, minimumWithdrawAmount: Map<AccountType, number>, account: BankAccountEntity, returnNoneOnEmpty: boolean = false): Promise<number | null> {
         while (true) {
-            const amount: string | null =await this.get_user_input(prompt, returnNoneOnEmpty);
+            const amount: string | null = await this.get_user_input(prompt, returnNoneOnEmpty);
             if (amount === null) {
                 return null;
             }
@@ -199,7 +202,7 @@ export class BankAppUI {
     async get_valid_account_type(prompt: string, minimumInitialDeposit: Map<AccountType, number>, minimumBalanceBeforeWithdrawal: Map<AccountType, number>, returnNoneOnEmpty: boolean = false): Promise<AccountType | null> {
         this.show_account_types(minimumInitialDeposit, minimumBalanceBeforeWithdrawal);
         while (true) {
-            const accountTypeInput: string | null =await this.get_user_input(prompt, returnNoneOnEmpty);
+            const accountTypeInput: string | null = await this.get_user_input(prompt, returnNoneOnEmpty);
             if (accountTypeInput === null) {
                 return null;
             }
@@ -217,7 +220,7 @@ export class BankAppUI {
 
     async get_valid_account_id(prompt: string, returnNoneOnEmpty: boolean = false): Promise<number | null> {
         while (true) {
-            const accountId: string | null =await this.get_user_input(prompt, returnNoneOnEmpty);
+            const accountId: string | null = await this.get_user_input(prompt, returnNoneOnEmpty);
             if (accountId === null) {
                 return null;
             }

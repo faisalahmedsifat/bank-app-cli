@@ -6,7 +6,7 @@ export class InputValidator {
     static validateGender(genderInput: string): Gender | null {
         try {
             const gender = Gender[genderInput.toUpperCase() as keyof typeof Gender];
-            return gender;
+            return gender || null; // Return null if the input string doesn't match any enum value
         } catch (error) {
             return null;
         }
