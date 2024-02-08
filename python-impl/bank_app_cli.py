@@ -150,6 +150,10 @@ class BankAppCLI:
     def withdraw_from_an_account(self):
         # Get account number and amount to withdraw
         account_number = self.ui.get_valid_account_id("Enter account number to withdraw from: ")
+        account = GetAccountByIdUseCase(self.bank_account_repository).execute(account_number)
+        if(account == None):
+            print("Account not found...")
+            return
         amount_to_withdraw = self.ui.get_valid_withdraw_amount("Enter amount to withdraw: ", self.minimum_balance_before_withdrawal, GetAccountByIdUseCase(self.bank_account_repository).execute(account_number))
 
         # Withdraw from account
