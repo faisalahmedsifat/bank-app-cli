@@ -208,7 +208,7 @@ export class BankAppUI {
                 // }
                 const parsedAmount = parseFloat(amount);
                 const amountAfterWithdrawal = account.balance - parsedAmount;
-                if (isNaN(parsedAmount) || amountAfterWithdrawal < minimumWithdrawAmount.get(account.account_type)!) {
+                if (!(isNaN(parsedAmount) || amountAfterWithdrawal < minimumWithdrawAmount.get(account.account_type)!)) {
                     return parsedAmount;
                 }
                 const accountTypeName = AccountType[account.account_type];
