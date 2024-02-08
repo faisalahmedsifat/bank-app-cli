@@ -84,22 +84,27 @@ class BankAppCLI:
             print("\n")
             print("Enter new account holder details...\nPress \'Enter\' to skip updating an attribute...\n")
             
-            first_name = self.ui.get_user_input(f"Enter first name \"{account.account_holder.first_name}\": ")
+            first_name = self.ui.get_user_input(f"Enter first name \"{account.account_holder.first_name}\": ", returnNoneOnEmpty=True)
             if first_name == None: first_name = account.account_holder.first_name
             
-            last_name = self.ui.get_user_input(f"Enter last name \"{account.account_holder.last_name}\": ")
+            last_name = self.ui.get_user_input(f"Enter last name \"{account.account_holder.last_name}\": ", returnNoneOnEmpty=True)
             if last_name == None: last_name = account.account_holder.last_name
             
-            date_of_birth = self.ui.get_valid_date(f"Enter date of birth \"{account.account_holder.date_of_birth}\": ")
+            date_of_birth = self.ui.get_valid_date(f"Enter date of birth \"{account.account_holder.date_of_birth}\": ", returnNoneOnEmpty=True)
             if date_of_birth == None: date_of_birth = account.account_holder.date_of_birth
-            email = self.ui.get_valid_email(f"Enter email \"{account.account_holder.email}\": ")
+            
+            email = self.ui.get_valid_email(f"Enter email \"{account.account_holder.email}\": ", returnNoneOnEmpty=True)
             if email == None: email = account.account_holder.email
-            national_id = self.ui.get_user_input(f"Enter national id \"{account.account_holder.national_id}\": ")
+            
+            national_id = self.ui.get_user_input(f"Enter national id \"{account.account_holder.national_id}\": ", returnNoneOnEmpty=True)
             if national_id == None: national_id = account.account_holder.national_id
-            phone_number = self.ui.get_user_input(f"Enter phone number \"{account.account_holder.phone_number}\": ")
+            
+            phone_number = self.ui.get_user_input(f"Enter phone number \"{account.account_holder.phone_number}\": ", returnNoneOnEmpty=True)
             if phone_number == None: phone_number = account.account_holder.phone_number
-            parmanent_address = self.ui.get_user_input(f"Enter permanent address \"{account.account_holder.parmanent_address}\": ")
+            
+            parmanent_address = self.ui.get_user_input(f"Enter permanent address \"{account.account_holder.parmanent_address}\": ", returnNoneOnEmpty=True)
             if parmanent_address == None: parmanent_address = account.account_holder.parmanent_address
+            
             account_updated = UpdateAccountUseCase(self.bank_account_repository).execute(account_number_to_be_updated, first_name, last_name, date_of_birth, email, national_id, phone_number, parmanent_address)
             if account_updated:
                 print("Account updated successfully...\nupdated account details:")

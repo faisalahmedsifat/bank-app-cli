@@ -6,6 +6,7 @@ from insfrastructure.entities.bank_account_entity import BankAccountEntity
 from insfrastructure.entities.person_entity import PersonEntity
 from insfrastructure.enums.account_types import AccountType
 from insfrastructure.enums.gender_choice import Gender
+from insfrastructure.validators.input_validator import InputValidator
 
 
 class BankAppUI:
@@ -31,11 +32,15 @@ class BankAppUI:
         print("\n")
 
     @staticmethod
-    def get_user_input( message: str = "Enter your choice: "):
-        input_message = input(message)
-        if not input_message.strip():
-            return None
-        return input_message
+    def get_user_input( message: str = "Enter your choice: ", returnNoneOnEmpty: bool = False):
+        while True:
+            input_message = input(message)
+            if not input_message.strip():
+                if returnNoneOnEmpty: 
+                    return None
+                else:
+                    continue
+            return input_message
         
     @staticmethod
     def show_user_details( person: PersonEntity):
@@ -86,89 +91,6 @@ class BankAppUI:
         table = tabulate(data, headers=headers, tablefmt="pretty")
         print(table)
 
-
-    
-    @staticmethod
-    def get_valid_gender(prompt):
-        while True:
-            gender_input = BankAppUI.get_user_input(prompt)
-            try:
-                gender = Gender[gender_input.upper()]
-                return gender
-            except KeyError:
-                print("Invalid gender choice, please write \"male\" or \"female\" or \"other\"")
-
-    @staticmethod
-    def get_valid_date(prompt):
-        while True:
-            date_str = BankAppUI.get_user_input(prompt)
-            if date_str == None:
-                return None
-            else :
-                try:
-                    date = datetime.strptime(date_str, "%Y-%m-%d")
-                    return date
-                except ValueError:
-                    print("Invalid date format. Please enter date in the format YYYY-MM-DD.")
-                    continue
-            
-    @staticmethod
-    def get_valid_email(prompt):
-        while True:
-            email = BankAppUI.get_user_input(prompt)
-            if email == None:
-                return None
-            if re.match(r"[^@]+@[^@]+\.[^@]+", email):
-                return email
-            else:
-                print("Invalid email address format. Please enter a valid email address.")
-                
-    @staticmethod
-    def get_valid_amount(prompt, minimum_amount = None, account_type: AccountType = None):
-        while True:
-            amount = BankAppUI.get_user_input(prompt)
-            try:
-                amount = float(amount)
-                if(minimum_amount and account_type):
-                    if(amount < minimum_amount[account_type]):
-                        print(f"Amount must be greater than {minimum_amount[account_type]} for {account_type.name} account. Please enter a valid amount.")
-                        continue
-                return amount
-            except ValueError:
-                print("Invalid amount. Please enter a valid amount.")
-                continue
-            
-    @staticmethod
-    def get_valid_withdraw_amount(prompt, minimum_withdraw_ammounts, account: BankAccountEntity):
-        while True:
-            amount = BankAppUI.get_user_input(prompt)
-            if not account:
-                print("Account not found. Please enter a valid account number.")
-            try:
-                amount = float(amount)
-                amount_after_withdrawal = account.balance - amount
-                if(amount_after_withdrawal < minimum_withdraw_ammounts[account.account_type]):
-                    print(f"Account must have {minimum_withdraw_ammounts[account.account_type]} for a {account.account_type.name} account after withdrawal. Please enter a valid amount.")
-                    continue
-                return amount
-            except ValueError:
-                print("Invalid amount. Please enter a valid amount.")
-                continue
-            
-    @staticmethod
-    def get_valid_account_type(prompt, minimum_initial_deposit, minimum_balance_before_withdrawal):
-        BankAppUI.show_account_types(minimum_initial_deposit=minimum_initial_deposit, minimum_balance_before_withdrawal=minimum_balance_before_withdrawal)
-        while True:
-            account_type_input = BankAppUI.get_user_input(prompt)
-            try:
-                account_type = AccountType[account_type_input.upper()]
-                return account_type
-            except KeyError:
-                print("Invalid account type. Please enter either one of the following: ")
-                for account_type in AccountType:
-                    print(account_type.name.lower())
-                    
-                    
     @staticmethod
     def display_all_accounts(accounts):
         print("Displaying all accounts...\n")
@@ -176,14 +98,108 @@ class BankAppUI:
             print("No accounts found.")
         for account in accounts:
             BankAppUI.show_account_details(account, details_text=False)
-            
+
     @staticmethod
-    def get_valid_account_id(prompt):
+    def get_valid_gender(prompt, returnNoneOnEmpty: bool = False):
         while True:
-            account_id = BankAppUI.get_user_input(prompt)
-            try:
-                account_id = int(account_id)
-                return account_id
-            except ValueError:
+            gender_input = BankAppUI.get_user_input(prompt, returnNoneOnEmpty=True)
+            
+            if gender_input is None:
+                if returnNoneOnEmpty:
+                    return None
+            else:
+                gender = InputValidator.validate_gender(gender_input)
+                if gender is not None:
+                    return gender
+            
+                print("Invalid gender choice. Please enter \"male\", \"female\", or \"other\".")
+
+    @staticmethod
+    def get_valid_date(prompt, returnNoneOnEmpty: bool = False):
+        while True:
+            date_str = BankAppUI.get_user_input(prompt, returnNoneOnEmpty=True)
+            if date_str is None:
+                if returnNoneOnEmpty:
+                    return None
+            else:
+                date = InputValidator.validate_date(date_str)
+                if date is not None:
+                    return date
+            print("Invalid date format. Please enter date in the format YYYY-MM-DD.")
+
+
+    @staticmethod
+    def get_valid_email(prompt, returnNoneOnEmpty: bool = False):
+        while True:
+            email = BankAppUI.get_user_input(prompt, returnNoneOnEmpty=True)
+            if email is None:
+                if returnNoneOnEmpty:
+                    return None
+            else:
+                validated_email = InputValidator.validate_email(email)
+                if validated_email is not None:
+                    return validated_email
+                print("Invalid email address format. Please enter a valid email address.")
+
+
+    @staticmethod
+    def get_valid_amount(prompt, minimum_amount=None, account_type=None, returnNoneOnEmpty: bool = False):
+        while True:
+            amount = BankAppUI.get_user_input(prompt, returnNoneOnEmpty=True)
+            if amount is None:
+                if returnNoneOnEmpty:
+                    return None
+            else:
+                validated_amount = InputValidator.validate_amount(amount)
+                if validated_amount is not None:
+                    if minimum_amount and account_type:
+                        if validated_amount < minimum_amount[account_type]:
+                            print(f"Amount must be greater than {minimum_amount[account_type]} for {account_type.name} account. Please enter a valid amount.")
+                            continue
+                    return validated_amount
+                print("Invalid amount. Please enter a valid amount.")
+                
+
+
+    @staticmethod
+    def get_valid_withdraw_amount(prompt, minimum_withdraw_amount, account, returnNoneOnEmpty: bool = False):
+        while True:
+            amount = BankAppUI.get_user_input(prompt, returnNoneOnEmpty=True)
+            if amount is None:
+                if returnNoneOnEmpty:
+                    return None
+            else:
+                validated_amount = InputValidator.validate_withdraw_amount(amount, minimum_withdraw_amount[account.account_type], account.balance if account else 0)
+                if validated_amount is not None:
+                    return validated_amount
+                print(f"Invalid amount. Account must have {minimum_withdraw_amount} for a {account.account_type.name} account after withdrawal. Please enter a valid amount.")
+
+
+    @staticmethod
+    def get_valid_account_type(prompt, minimum_initial_deposit, minimum_balance_before_withdrawal, returnNoneOnEmpty: bool = False):
+        BankAppUI.show_account_types(minimum_initial_deposit=minimum_initial_deposit, minimum_balance_before_withdrawal=minimum_balance_before_withdrawal)
+        while True:
+            account_type_input = BankAppUI.get_user_input(prompt, returnNoneOnEmpty=True)
+            if account_type_input is None:
+                if returnNoneOnEmpty:
+                    return None
+            else:
+                validated_account_type = InputValidator.validate_account_type(account_type_input)
+                if validated_account_type is not None:
+                    return validated_account_type
+                print("Invalid account type. Please enter either one of the following: ")
+                for account_type in AccountType:
+                    print(account_type.name.lower())
+
+
+    @staticmethod
+    def get_valid_account_id(prompt, returnNoneOnEmpty: bool = False):
+        while True:
+            account_id = BankAppUI.get_user_input(prompt, returnNoneOnEmpty=True)
+            if account_id is None:
+                return None
+            else:
+                validated_account_id = InputValidator.validate_account_id(account_id)
+                if validated_account_id is not None:
+                    return validated_account_id
                 print("Invalid account number. Please enter a valid account number.")
-                continue
