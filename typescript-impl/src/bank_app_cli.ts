@@ -58,18 +58,18 @@ export class BankAppCLI {
 
         // Create account holder
         const account_holder: PersonEntity = new PersonEntity(
-            first_name ?? '',
-            last_name ?? '',
-            date_of_birth ?? new Date(),
-            email ?? '',
-            gender ?? Gender.MALE, // Provide a default value for gender when it is null
-            national_id ?? '',
-            phone_number ?? '',
-            parmanent_address ?? ''
+            first_name,
+            last_name ,
+            date_of_birth,
+            email,
+            gender, // Provide a default value for gender when it is null
+            national_id,
+            phone_number,
+            parmanent_address
         );
 
         // Get account details
-        var  account_type: AccountType | null = await this.ui.get_valid_account_type("Enter account type: ", this.minimum_initial_deposit, this.minimum_balance_before_withdrawal);
+        var  account_type: any = await this.ui.get_valid_account_type("Enter account type: ", this.minimum_initial_deposit, this.minimum_balance_before_withdrawal);
         account_type = account_type ?? AccountType.SAVINGS; // Provide a default value for account_type when it is null 
         
         var initial_deposit: number | null = await this.ui.get_valid_amount("Enter initial deposit: ", this.minimum_initial_deposit, account_type);
@@ -180,8 +180,12 @@ export class BankAppCLI {
         // Get account number and amount to withdraw
         const account_number: any = await this.ui.get_valid_account_id("Enter account number to withdraw from: ");
         const account: any = new GetAccountByIdUseCase(this.bank_account_repository).execute(account_number);
+        if(!account) {
+            console.log("Account not found...");
+            return;
+        }
         const amount_to_withdraw: any = await this.ui.get_valid_withdraw_amount("Enter amount to withdraw: ", this.minimum_balance_before_withdrawal, account);
-
+        
 
         // Withdraw from account
         const withdrawal_complete: boolean = new WithdrawFromAccountUseCase(this.bank_account_repository).execute(account_number, amount_to_withdraw);

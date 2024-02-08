@@ -102,13 +102,12 @@ export class BankAppUI {
         const headers: string[] = ["Account Type", "Minimum Initial Deposit", "Minimum Balance Before Withdrawal"];
         const data: any[][] = [];
         for (const [accountType, initialDeposit] of minimumInitialDeposit.entries()) {
-            data.push([accountType, initialDeposit, minimumBalanceBeforeWithdrawal.get(accountType)]);
+            const accountTypeName = AccountType[accountType];
+            data.push([accountTypeName, initialDeposit, minimumBalanceBeforeWithdrawal.get(accountType)]);
         }
-        // const table: string = this.formatTable(data, headers);
-        // console.log(table(data));
-        // table(data);
         this.formatTable(data);
     }
+
 
     display_all_accounts(accounts: BankAccountEntity[]): void {
         console.log("Displaying all accounts...\n");
@@ -143,11 +142,14 @@ export class BankAppUI {
             if (dateStr === null) {
                 return null;
             }
-            const date: Date | null = InputValidator.validateDate(dateStr);
-            if (date !== null) {
-                return date;
+            else {
+
+                const date: Date | null = InputValidator.validateDate(dateStr);
+                if (date !== null) {
+                    return date;
+                }
+                console.log("Invalid date format. Please enter date in the format YYYY-MM-DD.");
             }
-            console.log("Invalid date format. Please enter date in the format YYYY-MM-DD.");
         }
     }
 
@@ -157,11 +159,14 @@ export class BankAppUI {
             if (email === null) {
                 return null;
             }
-            const validatedEmail: string | null = InputValidator.validateEmail(email);
-            if (validatedEmail !== null) {
-                return validatedEmail;
+            else {
+
+                const validatedEmail: string | null = InputValidator.validateEmail(email);
+                if (validatedEmail !== null) {
+                    return validatedEmail;
+                }
+                console.log("Invalid email address format. Please enter a valid email address.");
             }
-            console.log("Invalid email address format. Please enter a valid email address.");
         }
     }
 
@@ -171,17 +176,21 @@ export class BankAppUI {
             if (amount === null) {
                 return null;
             }
-            const validatedAmount: number | null = InputValidator.validateAmount(amount);
-            if (validatedAmount !== null) {
-                if (minimumAmount && accountType) {
-                    if (validatedAmount < (minimumAmount.get(accountType) || 0)) {
-                        console.log(`Amount must be greater than ${minimumAmount.get(accountType)} for ${accountType} account. Please enter a valid amount.`);
-                        continue;
+            else {
+
+                const validatedAmount: number | null = InputValidator.validateAmount(amount);
+                if (validatedAmount !== null) {
+                    if (minimumAmount && accountType) {
+                        const accountTypeName = AccountType[accountType];
+                        if (validatedAmount < (minimumAmount.get(accountType) || 0)) {
+                            console.log(`Amount must be greater than ${minimumAmount.get(accountType)} for ${accountTypeName} account. Please enter a valid amount.`);
+                            continue;
+                        }
                     }
+                    return validatedAmount;
                 }
-                return validatedAmount;
+                console.log("Invalid amount. Please enter a valid amount.");
             }
-            console.log("Invalid amount. Please enter a valid amount.");
         }
     }
 
@@ -191,11 +200,20 @@ export class BankAppUI {
             if (amount === null) {
                 return null;
             }
-            const validatedAmount: number | null = InputValidator.validateWithdrawAmount(amount, minimumWithdrawAmount.get(account.account_type) || 0, account.balance || 0);
-            if (validatedAmount !== null) {
-                return validatedAmount;
+            else {
+
+                // const validatedAmount: any= InputValidator.validateWithdrawAmount(amount, minimumWithdrawAmount.get(account.account_type), account.balance);
+                // if (validatedAmount !== null) {
+                //     return validatedAmount;
+                // }
+                const parsedAmount = parseFloat(amount);
+                const amountAfterWithdrawal = account.balance - parsedAmount;
+                if (isNaN(parsedAmount) || amountAfterWithdrawal < minimumWithdrawAmount.get(account.account_type)!) {
+                    return parsedAmount;
+                }
+                const accountTypeName = AccountType[account.account_type];
+                console.log(`Invalid amount. Account must have ${minimumWithdrawAmount.get(account.account_type)} for a ${accountTypeName} account after withdrawal. Please enter a valid amount.`);
             }
-            console.log(`Invalid amount. Account must have ${minimumWithdrawAmount} for a ${account.account_type} account after withdrawal. Please enter a valid amount.`);
         }
     }
 
@@ -206,15 +224,20 @@ export class BankAppUI {
             if (accountTypeInput === null) {
                 return null;
             }
-            const validatedAccountType: AccountType | null = InputValidator.validateAccountType(accountTypeInput);
-            if (validatedAccountType !== null) {
-                return validatedAccountType;
-            }
-            console.log("Invalid account type. Please enter either one of the following: ");
+            else {
+                const validatedAccountType: AccountType | null = InputValidator.validateAccountType(accountTypeInput);
+                if (validatedAccountType !== null) {
+                    return validatedAccountType;
+                }
+                console.log("Invalid account type. Please enter either one of the following: ");
 
-            for (const accountType in AccountType) {
-                console.log(accountType);
+                for (const accountTypeName in AccountType) {
+                    if (isNaN(parseInt(accountTypeName))) {
+                        console.log(accountTypeName);
+                    }
+                }
             }
+
         }
     }
 
@@ -224,11 +247,14 @@ export class BankAppUI {
             if (accountId === null) {
                 return null;
             }
-            const validatedAccountId: number | null = InputValidator.validateAccountId(accountId);
-            if (validatedAccountId !== null) {
-                return validatedAccountId;
+            else {
+
+                const validatedAccountId: number | null = InputValidator.validateAccountId(accountId);
+                if (validatedAccountId !== null) {
+                    return validatedAccountId;
+                }
+                console.log("Invalid account number. Please enter a valid account number.");
             }
-            console.log("Invalid account number. Please enter a valid account number.");
         }
     }
 

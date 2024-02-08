@@ -45,7 +45,7 @@ export class InputValidator {
         }
     }
 
-    static validateWithdrawAmount(amount: string, minimumWithdrawAmount: number, accountBalance: number): number | null {
+    static validateWithdrawAmount(amount: string, minimumWithdrawAmount: any, accountBalance: number): number | null {
         try {
             const parsedAmount = parseFloat(amount);
             const amountAfterWithdrawal = accountBalance - parsedAmount;
@@ -61,7 +61,7 @@ export class InputValidator {
     static validateAccountType(accountTypeInput: string): AccountType | null {
         try {
             const accountType = AccountType[accountTypeInput.toUpperCase() as keyof typeof AccountType];
-            return accountType;
+            return accountType || null;
         } catch (error) {
             return null;
         }
