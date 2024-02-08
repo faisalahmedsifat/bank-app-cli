@@ -1,10 +1,13 @@
 import { BankAccountRepository } from '../repositories/bank_account_repository';
-import { BankAccountEntity } from '../entities/bank_account_entity';
 
-export class GetAllAccountsUseCase {
-    constructor(private bank_account_repo: BankAccountRepository) { }
+export class UpdateAccountUseCase {
+    private bank_account_repo: BankAccountRepository;
 
-    execute(): BankAccountEntity[] {
-        return this.bank_account_repo.show_all_accounts();
+    constructor(bank_account_repo: BankAccountRepository) {
+        this.bank_account_repo = bank_account_repo;
+    }
+
+    public execute(bank_account_id: number, first_name: string, last_name: string, date_of_birth: Date, email: string, national_id: string, phone_number: string, parmanent_address: string): boolean {
+        return this.bank_account_repo.update(bank_account_id, first_name, last_name, date_of_birth, email, national_id, phone_number, parmanent_address);
     }
 }
